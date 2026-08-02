@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>الاختبار البعدي | تصميم خطط التعلم الفردية وتطبيقها</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --gold:#AB833A;
+    --gold-dark:#7F612B;
+    --gold-light:#D0AB74;
+    --cream:#F7F1E3;
+    --cream-deep:#EFE4CC;
+    --ink:#33302A;
+    --ink-soft:#6B6459;
+    --white:#FFFFFF;
+    --green:#2E7D32;
+    --red:#B3261E;
+    --line:#E3D6B8;
+    --shadow: 0 18px 40px -22px rgba(90,68,20,0.35);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Tajawal', 'Cairo', sans-serif;
+    background:
+      radial-gradient(1200px 500px at 15% -10%, rgba(171,131,58,0.10), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(171,131,58,0.08), transparent 55%),
+      var(--cream);
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:760px;
+    margin:0 auto;
+    padding:28px 18px 60px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .brandbar{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:26px; gap:10px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-badge{
+    width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(135deg, var(--gold), var(--gold-dark));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 14px -6px rgba(127,97,43,0.6);
+    flex-shrink:0;
+  }
+  .brand-text{line-height:1.25;}
+  .brand-text b{display:block; font-size:13.5px; font-weight:800; color:var(--ink);}
+  .brand-text span{display:block; font-size:11px; color:var(--ink-soft);}
+  .mode-link{
+    border:none; background:transparent; color:var(--gold-dark);
+    font-family:inherit; font-size:12.5px; font-weight:700;
+    cursor:pointer; padding:8px 10px; border-radius:10px;
+    display:flex; align-items:center; gap:6px; opacity:0.85;
+  }
+  .mode-link:hover{ background:rgba(171,131,58,0.10); opacity:1; }
+
+  .card{
+    background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
+    border:1px solid var(--line); padding:34px 28px;
+  }
+  @media (max-width:480px){ .card{ padding:24px 18px; } }
+
+  .view{ display:none; flex:1; flex-direction:column; }
+  .view.active{ display:flex; }
+
+  #view-intro .card{ text-align:center; }
+  .intro-badge{
+    width:86px; height:86px; margin:0 auto 20px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 60%, var(--gold-dark));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 14px 30px -14px rgba(127,97,43,0.65);
+  }
+  .intro-badge svg{ width:40px; height:40px; }
+  .eyebrow{
+    display:inline-block; font-size:12.5px; font-weight:800; color:var(--gold-dark);
+    background:rgba(171,131,58,0.12); padding:6px 14px; border-radius:999px; margin-bottom:14px;
+  }
+  h1.intro-title{ font-size:26px; font-weight:900; margin:0 0 8px; line-height:1.4; color:var(--ink); }
+  .intro-sub{ font-size:14.5px; color:var(--ink-soft); margin:0 0 26px; line-height:1.9; }
+  .intro-note{
+    text-align:start; background:var(--cream); border:1px solid var(--line);
+    border-radius:14px; padding:16px 18px; margin:0 0 26px; font-size:13.5px; color:var(--ink); line-height:2;
+  }
+  .intro-note b{ color:var(--gold-dark); }
+  .meta-row{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:28px; }
+  .meta-pill{
+    background:var(--cream); border:1px solid var(--line); border-radius:999px;
+    padding:8px 16px; font-size:12.5px; font-weight:700; color:var(--ink-soft);
+    display:flex; align-items:center; gap:6px;
+  }
+  .btn{
+    appearance:none; border:none; cursor:pointer; font-family:inherit;
+    font-weight:800; font-size:15.5px; border-radius:14px; padding:15px 20px;
+    transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease; width:100%;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color:#fff; box-shadow:0 14px 26px -14px rgba(127,97,43,0.75);
+  }
+  .btn-primary:hover{ transform:translateY(-1px); }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; }
+  .btn-ghost{ background:transparent; color:var(--gold-dark); border:1.5px solid var(--gold-light); }
+  .btn-ghost:hover{ background:rgba(171,131,58,0.08); }
+
+  .progress-wrap{ margin-bottom:22px; }
+  .progress-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:9px; }
+  .progress-label{ font-size:12.5px; font-weight:800; color:var(--ink-soft); }
+  .progress-count{ font-size:12.5px; font-weight:800; color:var(--gold-dark); }
+  .progress-track{ height:7px; border-radius:999px; background:var(--cream-deep); overflow:hidden; }
+  .progress-fill{
+    height:100%; border-radius:999px; background:linear-gradient(90deg, var(--gold-light), var(--gold));
+    transition:width .35s ease;
+  }
+  .q-skill{
+    display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:800; color:var(--gold-dark);
+    background:rgba(171,131,58,0.12); padding:5px 12px; border-radius:999px; margin-bottom:16px;
+  }
+  .q-scenario{ font-size:17px; line-height:2; font-weight:600; color:var(--ink); margin:0 0 24px; }
+  .options{ display:flex; flex-direction:column; gap:12px; margin-bottom:26px; }
+  .option{
+    display:flex; align-items:flex-start; gap:12px; border:1.5px solid var(--line); border-radius:14px;
+    padding:14px 16px; cursor:pointer; background:#fff; text-align:start;
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .option:hover{ border-color:var(--gold-light); background:rgba(171,131,58,0.04); }
+  .option.selected{ border-color:var(--gold); background:rgba(171,131,58,0.09); }
+  .opt-letter{
+    flex-shrink:0; width:30px; height:30px; border-radius:50%; background:var(--cream-deep);
+    color:var(--gold-dark); font-weight:900; font-size:13px;
+    display:flex; align-items:center; justify-content:center; border:1.5px solid var(--line);
+  }
+  .option.selected .opt-letter{ background:var(--gold); color:#fff; border-color:var(--gold); }
+  .opt-text{ font-size:14.5px; line-height:1.85; color:var(--ink); padding-top:3px; }
+  .quiz-actions{ display:flex; gap:10px; }
+  .quiz-actions .btn{ flex:1; }
+
+  .result-score{ width:150px; height:150px; margin:6px auto 18px; position:relative; display:flex; align-items:center; justify-content:center; }
+  .result-score svg{ width:150px; height:150px; transform:rotate(-90deg); }
+  .result-score-num{ position:absolute; text-align:center; }
+  .result-score-num b{ display:block; font-size:34px; font-weight:900; color:var(--ink); }
+  .result-score-num span{ font-size:11.5px; color:var(--ink-soft); font-weight:700; }
+  .result-band{ text-align:center; font-size:19px; font-weight:900; margin:0 0 8px; color:var(--gold-dark); }
+  .result-msg{ text-align:center; font-size:14px; color:var(--ink-soft); line-height:2; margin:0 0 24px; }
+
+  .compare-box{
+    border:1.5px dashed var(--gold-light); border-radius:14px; padding:16px 18px; margin-bottom:26px; background:var(--cream);
+  }
+  .compare-box b{ font-size:13.5px; color:var(--ink); display:block; margin-bottom:10px; }
+  .compare-row{ display:flex; gap:8px; align-items:center; }
+  .compare-row input{
+    width:70px; text-align:center; border:1.5px solid var(--line); border-radius:10px; padding:10px 8px;
+    font-family:inherit; font-size:14px; font-weight:800; color:var(--ink);
+  }
+  .compare-row .btn{ width:auto; padding:10px 18px; font-size:13px; flex:1; }
+  .compare-result{
+    margin-top:12px; font-size:13.5px; font-weight:700; color:var(--green); line-height:1.9; display:none;
+  }
+
+  .breakdown-title{ font-size:13.5px; font-weight:800; color:var(--ink); margin:0 0 14px; }
+  .skill-row{ margin-bottom:14px; }
+  .skill-row-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .skill-name{ font-size:13px; font-weight:700; color:var(--ink); }
+  .skill-frac{ font-size:12px; font-weight:800; color:var(--ink-soft); }
+  .skill-track{ height:8px; border-radius:999px; background:var(--cream-deep); overflow:hidden; }
+  .skill-fill{ height:100%; border-radius:999px; background:linear-gradient(90deg, var(--gold-light), var(--gold)); }
+  .result-actions{ display:flex; flex-direction:column; gap:10px; margin-top:26px; }
+  .disclaimer{
+    margin-top:22px; font-size:12px; color:var(--ink-soft); text-align:center;
+    background:var(--cream); border-radius:12px; padding:12px 16px; line-height:1.9;
+  }
+
+  #view-trainer .card{ padding:26px 20px; }
+  .trainer-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .trainer-title{ font-size:19px; font-weight:900; margin:0; }
+  .trainer-sub{ font-size:13px; color:var(--ink-soft); margin:2px 0 20px; line-height:1.9; }
+  .trainer-box{
+    border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin-bottom:14px; background:var(--cream);
+  }
+  .trainer-box .tb-q{ font-size:12px; font-weight:800; color:var(--gold-dark); margin-bottom:6px; }
+  .trainer-box .tb-scenario{ font-size:13.5px; color:var(--ink); line-height:1.85; margin-bottom:10px; }
+  .tb-answer{ font-size:13px; font-weight:800; color:var(--green); margin-bottom:6px; display:flex; gap:6px; align-items:baseline; }
+  .tb-rationale{ font-size:12.8px; color:var(--ink-soft); line-height:1.85; }
+  .tb-tags{ display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  .tb-skilltag{
+    display:inline-block; font-size:10.8px; font-weight:800; color:#fff; background:var(--gold);
+    padding:3px 10px; border-radius:999px;
+  }
+  .tb-levelTag{
+    display:inline-block; font-size:10.8px; font-weight:800; color:var(--gold-dark); background:#fff;
+    border:1.3px solid var(--gold-light); padding:3px 10px; border-radius:999px;
+  }
+  .guide-box{
+    background:#fff; border:1.5px dashed var(--gold-light); border-radius:14px; padding:16px 18px;
+    margin-bottom:22px; font-size:13px; line-height:2; color:var(--ink);
+  }
+  .guide-box b{ color:var(--gold-dark); }
+
+  .map-table{ width:100%; border-collapse:collapse; margin-bottom:22px; font-size:12px; }
+  .map-table th, .map-table td{
+    border:1px solid var(--line); padding:8px 10px; text-align:center; color:var(--ink);
+  }
+  .map-table th{ background:var(--cream-deep); font-weight:800; color:var(--gold-dark); }
+  .map-table td{ background:#fff; }
+
+  .qr-box{ text-align:center; border:1px solid var(--line); border-radius:14px; padding:20px; background:#fff; margin-top:10px; }
+  #qrcode{ display:flex; justify-content:center; margin:14px 0; }
+  #qrcode img{ border-radius:8px; }
+  .qr-url{ font-size:11.5px; color:var(--ink-soft); word-break:break-all; }
+
+  footer.page-footer{ text-align:center; font-size:11.5px; color:var(--ink-soft); margin-top:26px; opacity:.75; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="brandbar">
+    <div class="brand">
+      <div class="brand-badge">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
+          <path d="M4 12l5 5L20 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <b>تصميم خطط التعلم الفردية وتطبيقها</b>
+        <span>برنامج تدريبي للمعلمين</span>
+      </div>
+    </div>
+    <button class="mode-link" onclick="showTrainer()">🔑 نسخة المدرب</button>
+  </div>
+
+  <!-- ===================== INTRO ===================== -->
+  <section class="view active" id="view-intro">
+    <div class="card">
+      <div class="intro-badge">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 12l5 5L20 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="eyebrow">بعد إكمال البرنامج التدريبي</span>
+      <h1 class="intro-title">الاختبار البعدي: من المعرفة إلى الممارسة</h1>
+      <p class="intro-sub">10 مواقف تطبيقية لقياس نموّك المعرفي والمهاري بعد التدريب</p>
+
+      <div class="intro-note">
+        هذا الاختبار يقيس <b>قدرتك على التطبيق</b> لا مجرد تذكّر ما تدربتِ عليه.<br>
+        كل سؤال مبني على موقف تطبيقي واقعي يعكس ما مررتِ به فعليًا في الورشة وأثناء تطبيقك للخطة مع طلابك.<br>
+        أجيبي بناءً على فهمك وتطبيقك الفعلي — النتيجة تقارَن لاحقًا بالاختبار القبلي لقياس أثر البرنامج عليك.
+      </div>
+
+      <div class="meta-row">
+        <span class="meta-pill">🧭 10 أسئلة تطبيقية</span>
+        <span class="meta-pill">⏱ 6-8 دقائق</span>
+        <span class="meta-pill">📱 مناسب للجوال</span>
+      </div>
+
+      <button class="btn btn-primary" onclick="startQuiz()">ابدأ الاختبار →</button>
+    </div>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section class="view" id="view-quiz">
+    <div class="card">
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-label">تقدّمك في الاختبار</span>
+          <span class="progress-count" id="progressCount">السؤال 1 من 10</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+      </div>
+
+      <div class="q-skill" id="qSkill">—</div>
+      <p class="q-scenario" id="qScenario">...</p>
+      <div class="options" id="qOptions"></div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>التالي →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== RESULTS ===================== -->
+  <section class="view" id="view-results">
+    <div class="card">
+      <div class="result-score">
+        <svg viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="66" fill="none" stroke="#EFE4CC" stroke-width="12"/>
+          <circle cx="75" cy="75" r="66" fill="none" stroke="#AB833A" stroke-width="12"
+            stroke-linecap="round" id="scoreRing" stroke-dasharray="415" stroke-dashoffset="415"/>
+        </svg>
+        <div class="result-score-num"><b id="scoreNum">0/10</b><span>إجابات صحيحة</span></div>
+      </div>
+      <p class="result-band" id="resultBand">—</p>
+      <p class="result-msg" id="resultMsg">—</p>
+
+      <div class="compare-box">
+        <b>📊 قارني نتيجتك بالاختبار القبلي (اختياري)</b>
+        <div class="compare-row">
+          <input type="number" id="preScoreInput" min="0" max="10" placeholder="0-10">
+          <button class="btn btn-primary" onclick="compareGrowth()">قارني نموّي</button>
+        </div>
+        <div class="compare-result" id="compareResult"></div>
+      </div>
+
+      <p class="breakdown-title">مستوى تطبيقك حسب كل مهارة</p>
+      <div id="skillBreakdown"></div>
+
+      <div class="result-actions">
+        <button class="btn btn-ghost" onclick="restartQuiz()">إعادة الاختبار</button>
+      </div>
+
+      <div class="disclaimer">
+        هذه النتيجة تعكس مستوى تطبيقك الحالي لمبادئ البرنامج، وهي فرصة لتحديد ما يستحق مزيدًا من الممارسة الصفية، وليست حكمًا نهائيًا.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TRAINER VIEW ===================== -->
+  <section class="view" id="view-trainer">
+    <div class="card">
+      <div class="trainer-head">
+        <h2 class="trainer-title">🔑 نسخة المدرب</h2>
+        <button class="mode-link" onclick="showIntro()">العودة للاختبار ←</button>
+      </div>
+      <p class="trainer-sub">مفتاح الإجابات، المهارة ومستوى التفكير المستهدف لكل سؤال، وتفسير مختصر لسبب صحة الإجابة — لتحليل أثر البرنامج على كل متدرب ومقارنته بنتائجه في الاختبار القبلي.</p>
+
+      <div class="guide-box">
+        <b>كيف تستخدم هذه النسخة؟</b><br>
+        اجمعي درجة كل متدرب في الاختبار القبلي والبعدي، واحسبي الفرق (النمو) لكل مهارة عبر المحاور المتوازية بين الاختبارين (الجدول أدناه). النمو الجماعي المنخفض في مهارة معينة يشير لحاجة الجلسات القادمة لمزيد من التطبيق العملي فيها تحديدًا، بينما النمو الجماعي المرتفع يؤكد نجاح تلك الجلسة تحديدًا.
+      </div>
+
+      <b style="font-size:13.5px; display:block; margin-bottom:10px;">🔗 مقابلة محاور الاختبار القبلي بالبعدي</b>
+      <table class="map-table">
+        <tr><th>المحور</th><th>القبلي</th><th>البعدي</th></tr>
+        <tr><td>فهم جوهر الخطة الفردية</td><td>س1، س10</td><td>س10</td></tr>
+        <tr><td>تحليل احتياجات الطالب</td><td>س2</td><td>س1</td></tr>
+        <tr><td>نوع التدخل / الفجوة بالأدلة</td><td>س3، س4</td><td>س2، س3</td></tr>
+        <tr><td>صياغة أهداف SMART</td><td>س5</td><td>س4</td></tr>
+        <tr><td>اختيار الاستراتيجيات</td><td>س6، س7</td><td>س5، س6</td></tr>
+        <tr><td>المتابعة وتقويم الأثر</td><td>س8، س9</td><td>س7، س8</td></tr>
+        <tr><td>التعاون مع الأطراف المعنية</td><td>— (لا يقابله سؤال قبلي)</td><td>س9</td></tr>
+      </table>
+      <p style="font-size:11.5px; color:var(--ink-soft); margin:-12px 0 22px; line-height:1.8;">ملاحظة: "التعاون مع الأطراف المعنية" مهارة جديدة تُقاس في البعدي فقط لأنها تعتمد على تطبيق فعلي مع ولي أمر حقيقي، وكذلك "توظيف الذكاء الاصطناعي" في القبلي مهارة فريدة لا يقابلها سؤال بعدي.</p>
+
+      <div id="trainerList"></div>
+
+      <div class="qr-box">
+        <b style="font-size:13.5px;">🔗 مولّد رمز QR — الصقي أي رابط واحصلي على الباركود فورًا</b>
+        <p style="font-size:12px; color:var(--ink-soft); margin:6px 0 14px;">بعد رفع هذا الملف على أي استضافة وحصولك على رابط يعمل، الصقيه هنا لإنشاء رمز QR جاهز للعرض أو الطباعة.</p>
+        <div style="display:flex; gap:8px; margin-bottom:6px;">
+          <input id="qrUrlInput" type="text" placeholder="https://..." dir="ltr"
+            style="flex:1; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px; font-family:inherit; font-size:13px; color:var(--ink);">
+          <button class="btn btn-primary" style="width:auto; padding:10px 18px; font-size:13px;" onclick="generateQR(document.getElementById('qrUrlInput').value)">توليد</button>
+        </div>
+        <div id="qrcode"></div>
+        <div class="qr-url" id="qrUrl"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page-footer">تصميم خطط التعلم الفردية وتطبيقها — الاختبار البعدي · يوليو 2026</footer>
+</div>
+
+<script>
+/* =====================================================
+   Question bank — 10 applied-practice scenarios
+   Parallel to the pre-test's growth domains + collaboration
+   ===================================================== */
+const QUESTIONS = [
+  {
+    skill: "تحليل احتياجات الطالب",
+    level: "تحليل",
+    scenario: "بعد تطبيق ما تعلمته في البرنامج، لاحظتِ أن نتيجة أحد الطلاب في اختبار واحد فقط تشير إلى ضعف في الرياضيات. ما الخطوة الأكثر اتساقًا مع ما تدربتِ عليه؟",
+    options: [
+      { text: "البدء فورًا في تصميم خطة علاجية بناءً على هذه النتيجة وحدها لتوفير الوقت" },
+      { text: "جمع شواهد إضافية — ملاحظات صفية، أداء سابق، تقييم تكويني — قبل تصنيف الطالب واتخاذ أي قرار", correct: true },
+      { text: "الانتظار لعدة أسابيع إضافية لجمع مزيد من البيانات، حتى لو كانت الملاحظات المتوفرة حاليًا كافية للبدء بتحليل أولي" },
+      { text: "تصنيف الطالب ضمن فئة «علاجي» بناءً على انطباعك العام عنه كطالب متوسط المستوى في الفصل" }
+    ],
+    rationale: "القرار المهني يُبنى دائمًا على تشخيص وشواهد فعلية متعددة لا على انطباع أو تصنيف مسبق أو نتيجة واحدة معزولة؛ هذه إحدى أهم الرسائل الجوهرية في البرنامج."
+  },
+  {
+    skill: "اختيار التدخل المناسب",
+    level: "تطبيق وتمييز",
+    scenario: "لاحظ أحد المعلمين أن طالبًا في الصف الرابع ينهي مهامه بسرعة ودقة عالية، ويطلب باستمرار أنشطة إضافية. في ضوء ما تدربتِ عليه حول أنواع التدخل، أي قرار يعكس تطبيقًا دقيقًا؟",
+    options: [
+      { text: "تصنيفه ضمن فئة «علاجي» لأن سرعته الزائدة في الإنجاز قد تُخفي ضعفًا في الانتباه" },
+      { text: "تصميم خطة إثرائية تعمّق تفكيره عبر مهام مفتوحة النهاية، بدل الاكتفاء بزيادة كمّ المهام", correct: true },
+      { text: "نقله لصف دراسي أعلى فورًا دون تصميم أي خطة إثرائية داخل صفه الحالي أولًا" },
+      { text: "تكليفه بمهام إضافية من نفس نوع تمارين الكتاب المدرسي لملء وقت فراغه" }
+    ],
+    rationale: "الإثراء الفعّال يعمّق التفكير عبر تحدٍّ معرفي حقيقي، لا بزيادة الكم من نفس المستوى ولا بالقفز لحلول جذرية (كالنقل الأكاديمي) دون استنفاد خيارات الإثراء داخل الصف أولًا."
+  },
+  {
+    skill: "استخدام البيانات والأدلة في اتخاذ القرار",
+    level: "تحليل واتخاذ قرار",
+    scenario: "أظهرت نتائج التقييم التكويني لأحد الطلاب تحسنًا طفيفًا خلال أسبوعين من تطبيق استراتيجية علاجية، لكن التحسن غير مستقر (يتقدم ثم يتراجع). في ضوء ما تدربتِ عليه في قراءة بيانات المتابعة، ما القرار الأنسب؟",
+    options: [
+      { text: "اعتبار الاستراتيجية ناجحة لوجود تحسن ولو طفيف، والاستمرار بنفس المسار دون تحليل سبب التذبذب" },
+      { text: "تحليل نمط التذبذب لتحديد العوامل المؤثرة، مثل مدى الاتساق في تطبيق الاستراتيجية، قبل الحكم على فعاليتها", correct: true },
+      { text: "إيقاف الاستراتيجية فورًا لعدم استقرار النتائج، والبدء باستراتيجية مختلفة كليًا من الأسبوع القادم" },
+      { text: "تجاهل تذبذب البيانات واعتماد الانطباع العام بأن الطالب «متجاوب بشكل عام» مع الخطة" }
+    ],
+    rationale: "القرار المبني على الأدلة يتطلب تحليل نمط البيانات وأسباب التذبذب، لا الحكم على النتيجة النهائية فقط أو الاكتفاء بانطباع عام يتجاهل التفاصيل التي تكشفها البيانات الفعلية."
+  },
+  {
+    skill: "صياغة أهداف فردية قابلة للقياس (SMART)",
+    level: "تطبيق وتقييم",
+    scenario: "بعد التدريب، صاغ أحد المعلمين هدفًا فرديًا: «سيتمكن الطالب من كتابة فقرة من خمس جمل بحد أقصى خطأين إملائيين خلال أربعة أسابيع». في ضوء معايير الجودة التي تدربتِ عليها، ما التقييم الأدق لهذه الصياغة؟",
+    options: [
+      { text: "صياغة ضعيفة لأنها مرتبطة بالدقة الإملائية فقط ولا تراعي مستوى الإبداع في الكتابة" },
+      { text: "صياغة جيدة ومكتملة العناصر، لأنها تحدد السلوك المستهدف والمعيار الكمي القابل للقياس والمدة الزمنية معًا", correct: true },
+      { text: "صياغة غير مكتملة لأنها لم تذكر الاستراتيجية التي سيستخدمها المعلم لتحقيق الهدف" },
+      { text: "صياغة غير مناسبة لأنها لا تراعي مدى دافعية الطالب الشخصية نحو الكتابة" }
+    ],
+    rationale: "الهدف الجيد وفق معايير SMART يحدد السلوك والمعيار الكمي والزمن. الاستراتيجية عنصر منفصل يأتي لاحقًا في تصميم الخطة، ولا يُشترط ذكرها داخل نص الهدف نفسه؛ الخلط بينهما خطأ شائع."
+  },
+  {
+    skill: "اختيار الاستراتيجيات المناسبة للفروق الفردية",
+    level: "تطبيق",
+    scenario: "بعد تطبيق خطتها الفردية، لاحظت إحدى المعلمات أن طالبة تتقن المفاهيم الرياضية شفهيًا بثقة، لكنها تتعثر عند الحل الكتابي المنظم للمسائل. أي استراتيجية تعكس تطبيقًا دقيقًا لاحتياجها الفعلي؟",
+    options: [
+      { text: "تكرار حل مزيد من المسائل من النوع نفسه لزيادة فرص التدريب الكتابي" },
+      { text: "استخدام منظمات كتابية بصرية (مخططات حل خطوة بخطوة) مع نمذجة الحل قبل الانتقال للاستقلالية", correct: true },
+      { text: "تخفيض عدد المسائل المطلوبة منها فقط، دون أي تعديل في طريقة عرض الحل أو تنظيمه" },
+      { text: "التركيز على تقوية حفظها للقوانين الرياضية شفهيًا بشكل أكبر" }
+    ],
+    rationale: "الفجوة هنا في تنظيم الحل الكتابي لا في الفهم الشفهي أو حفظ القوانين، فمعالجتها تتطلب أدوات تنظيمية بصرية ونمذجة، لا زيادة كمّ التمارين أو تخفيضها الكمي أو تقوية مهارة موجودة أصلًا."
+  },
+  {
+    skill: "اختيار الاستراتيجيات المناسبة للفروق الفردية",
+    level: "تقييم",
+    scenario: "بعد رصد شغف طالب متفوق في العلوم بالتجارب العملية، اختار معلمه تكليفه بمشروع بحثي ميداني يمتد لعدة أسابيع، بدل الاكتفاء بأسئلة إضافية من الكتاب المدرسي. ما الذي يجعل هذا القرار تطبيقًا ناضجًا لمبادئ الإثراء؟",
+    options: [
+      { text: "لأنه يشغل وقت الطالب الإضافي داخل الحصة بشكل مفيد له وللمعلم" },
+      { text: "لأنه يعمّق التفكير ويقدّم تحديًا معرفيًا حقيقيًا يتجاوز منهج الصف، بدل تكرار المحتوى نفسه بصيغة أخرى", correct: true },
+      { text: "لأنه يقلل العبء عن المعلم في المتابعة اليومية لهذا الطالب المتفوق" },
+      { text: "لأنه يهيئ الطالب مبكرًا لمنهج الصف الدراسي التالي فقط" }
+    ],
+    rationale: "جوهر الإثراء الجيد هو العمق المعرفي والتحدي الحقيقي المرتبط بشغف الطالب، لا ملء الوقت أو تخفيف عبء المعلم أو اختزاله في تسريع منهجي مبكر."
+  },
+  {
+    skill: "متابعة أثر الخطة وتعديلها",
+    level: "اتخاذ قرار",
+    scenario: "بعد أربعة أسابيع من تطبيق خطة فردية وتوثيق بطاقة ملاحظة أسبوعية، أظهرت البيانات تحسنًا ثابتًا لكنه أبطأ من الجدول الزمني الأصلي للهدف. ما القرار الأكثر اتساقًا مع مبدأ المتابعة الذي تدربتِ عليه؟",
+    options: [
+      { text: "اعتبار الخطة فاشلة لعدم بلوغ الهدف ضمن الجدول الزمني الأصلي، وإنهاؤها فورًا" },
+      { text: "مراجعة معدل التقدم الفعلي، وتعديل الجدول الزمني أو تكثيف الدعم، مع الإبقاء على الاستراتيجية التي تُظهر أثرًا فعليًا ولو جزئيًا", correct: true },
+      { text: "الاستمرار دون أي مراجعة، لأن وجود أي تحسن يعني أن كل شيء يسير كما ينبغي تمامًا" },
+      { text: "استبدال بطاقة الملاحظة نفسها بأداة قياس مختلفة، على أمل أن تُظهر نتائج مغايرة" }
+    ],
+    rationale: "المتابعة الجيدة تحلل معدل التقدم الفعلي وتعدّل الجدول الزمني أو الدعم عند الحاجة، ولا تحكم بالفشل الكامل على تقدم حقيقي ولو كان بطيئًا، ولا تغيّر أداة القياس بدل تحليل بيانات الأداء نفسها."
+  },
+  {
+    skill: "متابعة أثر الخطة وتعديلها",
+    level: "تحليل واتخاذ قرار",
+    scenario: "بعد تطبيق استراتيجية علاجية لمدة ثلاثة أسابيع بالتزام كامل بخطوات التنفيذ، أظهرت بطاقة الملاحظة الأسبوعية عدم وجود أي تقدم يُذكر. في ضوء ما تدربتِ عليه، ما الإجراء الأنسب؟",
+    options: [
+      { text: "الاستمرار بالاستراتيجية نفسها لفترة أطول، لأن تغييرها المتكرر قد يربك الطالب" },
+      { text: "مراجعة مدى ملاءمة الاستراتيجية نفسها لطبيعة فجوة الطالب، والنظر في استبدالها أو تعديل آلية تطبيقها", correct: true },
+      { text: "تحويل الطالب لتقييم خارجي متخصص فورًا، دون مراجعة تنفيذ الخطة الحالية أولًا" },
+      { text: "تقليل معايير النجاح في بطاقة الملاحظة لتصبح أقرب لأداء الطالب الحالي" }
+    ],
+    rationale: "غياب أي تقدم رغم الالتزام الكامل بالتنفيذ مؤشر على أن الاستراتيجية نفسها قد لا تناسب طبيعة الفجوة، فمراجعتها هي الخطوة المهنية — لا الاستمرار الأعمى، ولا تجاوز المراجعة الداخلية، ولا خفض سقف الهدف لتفادي مواجهة المشكلة الفعلية."
+  },
+  {
+    skill: "التعاون مع الأطراف المعنية",
+    level: "تطبيق وتقييم",
+    scenario: "في ضوء ما تدربتِ عليه حول إشراك ولي الأمر في متابعة الخطة الفردية، أي ممارسة تعكس تعاونًا فعليًا لا مجرد إبلاغ شكلي؟",
+    options: [
+      { text: "إرسال رسالة عامة لولي الأمر في نهاية الفصل الدراسي تلخّص أداء الطالب بشكل عام" },
+      { text: "إشراك ولي الأمر بشكل دوري ببيانات محددة عن تقدم الطالب نحو هدفه، وطلب دعمه في متابعة سلوك محدد في المنزل", correct: true },
+      { text: "الاكتفاء بإخبار ولي الأمر بوجود خطة فردية لابنه دون أي تفاصيل، تجنبًا لإثقاله" },
+      { text: "تحويل كل تواصل مع ولي الأمر لإدارة المدرسة، للحفاظ على الطابع الرسمي فقط" }
+    ],
+    rationale: "التعاون الفعلي مع ولي الأمر يعني إشراكًا دوريًا ببيانات محددة ودورًا فعليًا يدعم تنفيذ الخطة، لا إبلاغًا عامًا متأخرًا أو سطحيًا، ولا نزعًا لدور المعلم المباشر في هذا التواصل."
+  },
+  {
+    skill: "فهم جوهر خطة التعلم الفردية",
+    level: "تركيب وفهم عميق",
+    scenario: "بعد إكمال البرنامج، طُلب منك تلخيص الفكرة الجوهرية لخطة التعلم الفردية لزميل لم يحضر التدريب. أي تلخيص يعكس فهمًا دقيقًا لما تدربتِ عليه؟",
+    options: [
+      { text: "«هي وثيقة رسمية إضافية تُعبأ للطلبة ضعيفي المستوى فقط، لإرضاء متطلبات الإدارة»" },
+      { text: "«هي مسار تعلّمي موثّق ومترابط — هدف، ومحتوى، واستراتيجية، وأداة متابعة — مبني على تشخيص فعلي لأي طالب يحتاج مسارًا مختلفًا: علاجيًا أو إثرائيًا أو تكيفيًا»", correct: true },
+      { text: "«هي نفس فكرة التمايز اليومي داخل الحصة، لكن بصياغة أكثر رسمية على الورق»" },
+      { text: "«هي خطة تضعها إدارة المدرسة لكل طالب متعثر، بناءً على نتائج الاختبارات الموحدة فقط»" }
+    ],
+    rationale: "الخطة الفردية مسار موثّق ومترابط العناصر مبني على تشخيص فعلي، وتشمل كل طالب يحتاج مسارًا مختلفًا لا الطلبة المتعثرين فقط، وهي مختلفة جوهريًا عن التمايز اليومي غير الموثق، ومسؤولية المعلم المباشرة لا الإدارة وحدها."
+  }
+];
+
+/* =====================================================
+   State
+   ===================================================== */
+let current = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+
+const views = {
+  intro: document.getElementById('view-intro'),
+  quiz: document.getElementById('view-quiz'),
+  results: document.getElementById('view-results'),
+  trainer: document.getElementById('view-trainer'),
+};
+
+function setView(name){
+  Object.values(views).forEach(v => v.classList.remove('active'));
+  views[name].classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showIntro(){ setView('intro'); }
+
+function startQuiz(){
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  renderQuestion();
+  setView('quiz');
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  document.getElementById('qSkill').textContent = q.skill;
+  document.getElementById('qScenario').textContent = q.scenario;
+  document.getElementById('progressCount').textContent = `السؤال ${current+1} من ${QUESTIONS.length}`;
+  document.getElementById('progressFill').style.width = `${((current+1)/QUESTIONS.length)*100}%`;
+
+  const letters = ['أ','ب','ج','د'];
+  const optWrap = document.getElementById('qOptions');
+  optWrap.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[current] === i ? ' selected' : '');
+    div.onclick = () => selectOption(i);
+    div.innerHTML = `<span class="opt-letter">${letters[i]}</span><span class="opt-text">${opt.text}</span>`;
+    optWrap.appendChild(div);
+  });
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.disabled = answers[current] === null;
+  nextBtn.textContent = current === QUESTIONS.length - 1 ? 'عرض النتيجة →' : 'التالي →';
+}
+
+function selectOption(i){
+  answers[current] = i;
+  renderQuestion();
+}
+
+function nextQuestion(){
+  if(answers[current] === null) return;
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+let lastScore = 0;
+
+function showResults(){
+  let score = 0;
+  const skillMap = {};
+
+  QUESTIONS.forEach((q, i) => {
+    const correctIndex = q.options.findIndex(o => o.correct);
+    const isCorrect = answers[i] === correctIndex;
+    if(isCorrect) score++;
+
+    if(!skillMap[q.skill]) skillMap[q.skill] = { correct: 0, total: 0 };
+    skillMap[q.skill].total++;
+    if(isCorrect) skillMap[q.skill].correct++;
+  });
+  lastScore = score;
+
+  document.getElementById('scoreNum').textContent = `${score}/${QUESTIONS.length}`;
+  const circumference = 415;
+  const offset = circumference - (score / QUESTIONS.length) * circumference;
+  document.getElementById('scoreRing').style.strokeDashoffset = offset;
+
+  let band, msg;
+  if(score <= 3){
+    band = '🌱 بداية طريق التطبيق';
+    msg = 'ما زلت في مرحلة ربط المفاهيم بالتطبيق الفعلي. راجعي الأمثلة العملية في دليل المتدرب، واستمري بتطبيق خطة فردية واحدة كاملة مع طالب من صفك — الممارسة المتكررة هي أسرع طريق للإتقان.';
+  } else if(score <= 6){
+    band = '📘 نمو ملحوظ، استمري بالممارسة';
+    msg = 'إجاباتك تعكس نموًا حقيقيًا في تطبيق مبادئ البرنامج مقارنة بما قبل التدريب. ركّزي في الفترة القادمة على المهارات التي بدت أقل ثباتًا في التفصيل أدناه.';
+  } else if(score <= 8){
+    band = '🌟 تطبيق واثق لمبادئ البرنامج';
+    msg = 'تُظهر إجاباتك قدرة جيدة على تحليل المواقف واتخاذ قرارات مهنية مبنية على أدلة. واصلي توثيق أثر خطتك الفردية، فهذا ما يرسّخ هذا المستوى ويجعله ممارسة يومية مستقرة.';
+  } else {
+    band = '🏆 إتقان عملي متكامل';
+    msg = 'مستوى تطبيقك للمبادئ التي تدربتِ عليها متقدم جدًا وينتقل بوضوح من المعرفة النظرية إلى الممارسة المهنية. فكري في مشاركة خبرتك مع زميلاتك عبر مجتمع تعلم مهني داخل المدرسة.';
+  }
+  document.getElementById('resultBand').textContent = band;
+  document.getElementById('resultMsg').textContent = msg;
+
+  document.getElementById('preScoreInput').value = '';
+  document.getElementById('compareResult').style.display = 'none';
+
+  const breakdownWrap = document.getElementById('skillBreakdown');
+  breakdownWrap.innerHTML = '';
+  Object.entries(skillMap).forEach(([skill, val]) => {
+    const pct = Math.round((val.correct / val.total) * 100);
+    const row = document.createElement('div');
+    row.className = 'skill-row';
+    row.innerHTML = `
+      <div class="skill-row-top">
+        <span class="skill-name">${skill}</span>
+        <span class="skill-frac">${val.correct}/${val.total}</span>
+      </div>
+      <div class="skill-track"><div class="skill-fill" style="width:${pct}%"></div></div>
+    `;
+    breakdownWrap.appendChild(row);
+  });
+
+  setView('results');
+}
+
+function compareGrowth(){
+  const input = document.getElementById('preScoreInput');
+  const pre = parseInt(input.value, 10);
+  const resultBox = document.getElementById('compareResult');
+
+  if(isNaN(pre) || pre < 0 || pre > 10){
+    resultBox.style.display = 'block';
+    resultBox.style.color = 'var(--red)';
+    resultBox.textContent = 'أدخلي رقمًا صحيحًا بين 0 و10 (درجتك في الاختبار القبلي).';
+    return;
+  }
+
+  const delta = lastScore - pre;
+  resultBox.style.display = 'block';
+  resultBox.style.color = delta >= 0 ? 'var(--green)' : 'var(--ink-soft)';
+
+  if(delta > 0){
+    resultBox.textContent = `📈 نموّك: من ${pre}/10 إلى ${lastScore}/10 — تقدّم بمقدار ${delta} ${delta === 1 ? 'نقطة' : 'نقاط'}. أثر واضح للتدريب!`;
+  } else if(delta === 0){
+    resultBox.textContent = `➡️ درجتك ثابتة عند ${lastScore}/10 في الاختبارين. راجعي التفصيل أدناه لتحديد مهارة معينة تحتاج تطبيقًا أكثر.`;
+  } else {
+    resultBox.textContent = `درجتك الحالية ${lastScore}/10 مقابل ${pre}/10 قبليًا. المواقف البعدية أكثر تطبيقية وتفصيلًا، وهذا طبيعي أحيانًا — راجعي التفصيل أدناه لتحديد أين تحتاجين دعمًا إضافيًا.`;
+  }
+}
+
+function restartQuiz(){ startQuiz(); }
+
+/* =====================================================
+   Trainer view
+   ===================================================== */
+function showTrainer(){
+  const letters = ['أ','ب','ج','د'];
+  const wrap = document.getElementById('trainerList');
+  wrap.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const correctIndex = q.options.findIndex(o => o.correct);
+    const box = document.createElement('div');
+    box.className = 'trainer-box';
+    box.innerHTML = `
+      <div class="tb-q">السؤال ${i+1}</div>
+      <div class="tb-scenario">${q.scenario}</div>
+      <div class="tb-answer">✅ الإجابة الصحيحة: (${letters[correctIndex]}) ${q.options[correctIndex].text}</div>
+      <div class="tb-rationale">${q.rationale}</div>
+      <div class="tb-tags">
+        <span class="tb-skilltag">${q.skill}</span>
+        <span class="tb-levelTag">مستوى التفكير: ${q.level}</span>
+      </div>
+    `;
+    wrap.appendChild(box);
+  });
+
+  const currentUrl = window.location.href;
+  const isRealUrl = !currentUrl.startsWith('file://') && !currentUrl.startsWith('blob:');
+  document.getElementById('qrUrlInput').value = isRealUrl ? currentUrl : '';
+  generateQR(isRealUrl ? currentUrl : '');
+
+  setView('trainer');
+}
+
+function generateQR(url){
+  document.getElementById('qrcode').innerHTML = '';
+  url = (url || '').trim();
+
+  if(!url){
+    document.getElementById('qrUrl').textContent = 'الصقي رابط الاختبار في الحقل أعلاه ثم اضغطي "توليد" لإنشاء الباركود';
+    return;
+  }
+  document.getElementById('qrUrl').textContent = url;
+  try{
+    new QRCode(document.getElementById('qrcode'), {
+      text: url,
+      width: 160,
+      height: 160,
+      colorDark: '#33302A',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }catch(e){
+    document.getElementById('qrUrl').textContent = 'تعذّر إنشاء الباركود — تأكدي من وجود اتصال بالإنترنت عند فتح هذا الملف';
+  }
+}
+</script>
+</body>
+</html>
